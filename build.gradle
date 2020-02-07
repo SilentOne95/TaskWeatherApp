@@ -4,6 +4,8 @@ buildscript {
     ext {
         version_appcompat = '1.1.0'
         version_map = '17.0.0'
+        version_retrofit = '2.7.1'
+        version_moshi = '1.9.2'
     }
 
     repositories {
