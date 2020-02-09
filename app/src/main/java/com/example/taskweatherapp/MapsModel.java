@@ -16,7 +16,8 @@ import io.reactivex.schedulers.Schedulers;
 public class MapsModel implements MapsContract.Model {
 
     private final static String UNIT_TYPE_DATA = "metric";
-    private final static String APP_ID = "3e96c6d9c55636fa61eeeba00428f256";
+    // TODO: Provide your api key from https://api.openweathermap.org/
+    private final static String APP_ID = "";
 
     private MapsPresenter mPresenter;
 

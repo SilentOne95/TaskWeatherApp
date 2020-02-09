@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.taskweatherapp.adapter.WeatherForecastAdapter;
 import com.example.taskweatherapp.network.pojo.FetchedWeatherData;
@@ -56,9 +57,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
-    // Note: 30 sec interval set for testing purpose only
-    // Edit those values as so often location requests are not necessary
-    private static final int UPDATE_INTERVAL = 30 * 1000;
+    private static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     private static final int FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL / 2;
     private static final int MAX_WAIT_TIME = UPDATE_INTERVAL * 3;
 
@@ -138,7 +137,6 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     public void onConnected(@Nullable Bundle bundle) {
         setLocationRequest();
         setUpLocationUpdates();
-        getWeatherDataFromLastLocation();
     }
 
     @Override
@@ -148,16 +146,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    private void getWeatherDataFromLastLocation() {
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, location -> {
-                    if (location != null) {
-                        mPresenter.requestDataFromServer(location);
-                    }
-                });
+        Toast.makeText(this, "Ooops.. something went wrong", Toast.LENGTH_SHORT).show();
     }
 
     private void setLocationRequest() {
@@ -209,10 +198,16 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
                         new LatLng(lastLocation.getLatitude(),
                                 lastLocation.getLongitude()),
                         mGoogleMap.getCameraPosition().zoom));
+
+                getWeatherData(lastLocation);
             }
             super.onLocationResult(locationResult);
         }
     };
+
+    private void getWeatherData(Location location) {
+        mPresenter.requestDataFromServer(location);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -224,6 +219,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
                 mGoogleMap.setMyLocationEnabled(true);
             } else {
                 // Notify user that permission is necessary to show his location
+                Toast.makeText(this, "Permission in necessary to display your position", Toast.LENGTH_SHORT).show();
             }
         }
     }
