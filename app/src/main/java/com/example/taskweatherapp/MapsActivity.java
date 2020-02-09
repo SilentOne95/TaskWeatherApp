@@ -62,6 +62,9 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        initViews();
+        setUpPresenter();
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -85,6 +88,11 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         }
+    }
+
+    @Override
+    public void setUpPresenter() {
+        mPresenter = new MapsPresenter(this, new MapsModel());
     }
 
     @Override
@@ -236,5 +244,11 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
         if (mGoogleApiClient != null) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.disposableDispose();
     }
 }
