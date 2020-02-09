@@ -36,8 +36,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class MapsActivity extends AppCompatActivity implements MapsContract.View, OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private MapsPresenter mPresenter;
 
     private DrawerLayout mDrawerLayout;
 
@@ -60,8 +62,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        initViews();
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -72,7 +72,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void initViews() {
+    @Override
+    public void initViews() {
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -84,6 +85,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         }
+    }
+
+    @Override
+    public void setUpAdapter() {
+
     }
 
     @Override

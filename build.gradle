@@ -9,6 +9,8 @@ buildscript {
         version_retrofit = '2.7.1'
         version_moshi = '1.9.2'
         version_glide = '4.11.0'
+        version_adapter_rx = '2.6.0'
+        version_rxjava = '2.1.1'
     }
 
     repositories {
