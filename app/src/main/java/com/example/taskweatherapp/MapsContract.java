@@ -1,8 +1,8 @@
 package com.example.taskweatherapp;
 
-import com.example.taskweatherapp.network.pojo.Weather;
+import android.location.Location;
 
-import java.util.ArrayList;
+import com.example.taskweatherapp.network.pojo.FetchedWeatherData;
 
 import io.reactivex.disposables.Disposable;
 
@@ -11,16 +11,16 @@ public interface MapsContract {
     interface View {
         void initViews();
         void setUpPresenter();
-        void setUpAdapter();
+        void setUpAdapter(FetchedWeatherData weatherData);
     }
 
     interface Presenter {
-        void requestDataFromServer(Double lat, Double lng);
-        void passDataToAdapter(ArrayList<Weather> weatherList);
+        void requestDataFromServer(Location location);
+        void passDataToAdapter(FetchedWeatherData weatherData);
         void disposableDispose();
     }
 
     interface Model {
-        Disposable fetchDataFromServer(MapsPresenter presenter, Double lat, Double lng);
+        Disposable fetchDataFromServer(MapsPresenter presenter, Location location);
     }
 }

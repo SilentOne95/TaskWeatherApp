@@ -1,9 +1,11 @@
 package com.example.taskweatherapp;
 
-import com.example.taskweatherapp.network.RetrofitClient;
-import com.example.taskweatherapp.network.pojo.Weather;
+import android.location.Location;
 
-import java.util.ArrayList;
+import com.example.taskweatherapp.network.RetrofitClient;
+import com.example.taskweatherapp.network.pojo.CurrentWeather;
+import com.example.taskweatherapp.network.pojo.FetchedWeatherData;
+import com.example.taskweatherapp.network.pojo.Weather;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -13,42 +15,37 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MapsModel implements MapsContract.Model {
 
-    private final static String CURRENT_WEATHER_NEEDED = "weather";
-    private final static String FORECASTED_WEATHER_NEEDED = "forecast";
     private final static String UNIT_TYPE_DATA = "metric";
+    private final static String APP_ID = "3e96c6d9c55636fa61eeeba00428f256";
 
     private MapsPresenter mPresenter;
 
     @Override
-    public Disposable fetchDataFromServer(MapsPresenter presenter, Double lat, Double lng) {
+    public Disposable fetchDataFromServer(MapsPresenter presenter, Location location) {
         mPresenter = presenter;
 
-        return getObservable(lat, lng)
+        return getObservable(location)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> mPresenter.passDataToAdapter(data));
     }
 
-    private Observable<ArrayList<Weather>> getObservable(Double lat, Double lng) {
-        ArrayList<Weather> list = new ArrayList<>();
-        return Observable.zip(getTodayWeather(lat, lng), getForecastWeather(lat, lng),
-                (weatherToday, weatherForecast) -> {
-            list.add(weatherToday);
-            list.add(weatherForecast);
-            return list;
-        });
+    private Observable<FetchedWeatherData> getObservable(Location location) {
+        return Observable.zip(getTodayWeather(location.getLatitude(), location.getLongitude()),
+                getForecastWeather(location.getLatitude(), location.getLongitude()),
+                FetchedWeatherData::new);
     }
 
-    private Observable<Weather> getTodayWeather(Double lat, Double lng) {
+    private Observable<CurrentWeather> getTodayWeather(Double lat, Double lng) {
         return RetrofitClient.getApi()
-                .getWeather(CURRENT_WEATHER_NEEDED, lat, lng, UNIT_TYPE_DATA, "3e96c6d9c55636fa61eeeba00428f256")
+                .getCurrentWeather(lat, lng, UNIT_TYPE_DATA, APP_ID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Observable<Weather> getForecastWeather(Double lat, Double lng) {
         return RetrofitClient.getApi()
-                .getWeather(FORECASTED_WEATHER_NEEDED, lat, lng, UNIT_TYPE_DATA, "3e96c6d9c55636fa61eeeba00428f256")
+                .getForecastedWeather(lat, lng, UNIT_TYPE_DATA, APP_ID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

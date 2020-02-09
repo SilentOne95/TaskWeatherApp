@@ -11,6 +11,7 @@ buildscript {
         version_glide = '4.11.0'
         version_adapter_rx = '2.6.0'
         version_rxjava = '2.1.1'
+        version_logginghttp = '4.2.1'
     }
 
     repositories {

@@ -1,10 +1,10 @@
 package com.example.taskweatherapp;
 
+import android.location.Location;
+
 import androidx.annotation.Nullable;
 
-import com.example.taskweatherapp.network.pojo.Weather;
-
-import java.util.ArrayList;
+import com.example.taskweatherapp.network.pojo.FetchedWeatherData;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -23,15 +23,15 @@ public class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
-    public void requestDataFromServer(Double lat, Double lng) {
-        Disposable disposable = mModel.fetchDataFromServer(this, lat, lng);
+    public void requestDataFromServer(Location location) {
+        Disposable disposable = mModel.fetchDataFromServer(this, location);
         mCompositeDisposable.add(disposable);
     }
 
     @Override
-    public void passDataToAdapter(ArrayList<Weather> weatherList) {
+    public void passDataToAdapter(FetchedWeatherData weatherData) {
         if (mView != null) {
-            mView.setUpAdapter();
+            mView.setUpAdapter(weatherData);
         }
     }
 

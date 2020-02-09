@@ -9,6 +9,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -19,6 +21,8 @@ import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.taskweatherapp.adapter.WeatherForecastAdapter;
+import com.example.taskweatherapp.network.pojo.FetchedWeatherData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,6 +46,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     private MapsPresenter mPresenter;
 
     private DrawerLayout mDrawerLayout;
+    private RecyclerView mRecyclerView;
 
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -79,6 +84,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     public void initViews() {
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         // Set up Toolbar, ActionBar, DrawerLayout, NavigationView
         setSupportActionBar(mToolbar);
@@ -96,8 +102,9 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     }
 
     @Override
-    public void setUpAdapter() {
-
+    public void setUpAdapter(FetchedWeatherData weatherData) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(new WeatherForecastAdapter(this, weatherData));
     }
 
     @Override
@@ -131,6 +138,7 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     public void onConnected(@Nullable Bundle bundle) {
         setLocationRequest();
         setUpLocationUpdates();
+        getWeatherDataFromLastLocation();
     }
 
     @Override
@@ -141,6 +149,15 @@ public class MapsActivity extends AppCompatActivity implements MapsContract.View
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private void getWeatherDataFromLastLocation() {
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        mPresenter.requestDataFromServer(location);
+                    }
+                });
     }
 
     private void setLocationRequest() {
