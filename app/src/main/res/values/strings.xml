@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">TaskWeatherApp</string>
-    <string name="title_activity_maps">Weather map</string>
+    <string name="title_activity_maps">WeatherApp</string>
 
     <string name="nav_header_desc">Navigation header image</string>
     <string name="nav_header_title">Weather App</string>
     <string name="nav_header_subtitle">Check weather for the next 3 days for your location</string>
 
     <string name="menu_action_settings">Settings</string>
+
+    <!-- Image descriptions -->
+    <string name="weather_icon_desc">Weather icon</string>
+
 </resources>

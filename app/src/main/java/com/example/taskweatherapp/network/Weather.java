@@ -200,6 +200,8 @@ class WeatherList {
     }
 }
 
+// Note: In order to get desired unit, specify while sending request
+// Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit
 class Temperature {
 
     @Json(name = "temp")
@@ -327,10 +329,12 @@ class Clouds {
     }
 }
 
+// Note: In order to get desired unit, specify while sending request
+// Unit Default: meter/sec, Metric: meter/sec, Imperial: miles/hour
 class Wind {
 
     @Json(name = "speed")
-    private Double speed; // Unit Default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
+    private Double speed;
     @Json(name = "deg")
     private Integer direction; // Degrees (meteorological)
 
