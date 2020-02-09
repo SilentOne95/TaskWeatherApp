@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskweatherapp.R;
-import com.example.taskweatherapp.network.Weather;
+import com.example.taskweatherapp.network.pojo.Weather;
 
 import java.util.List;
 
