@@ -5,7 +5,7 @@ import com.squareup.moshi.Json;
 public class Location {
 
     @Json(name = "id")
-    private Integer id;
+    private Integer cityId;
     @Json(name = "name")
     private String cityName;
     @Json(name = "coord")
@@ -20,11 +20,11 @@ public class Location {
     private Integer sunsetTime;
 
     public Integer getId() {
-        return id;
+        return cityId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public String getCityName() {
